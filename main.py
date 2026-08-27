@@ -36,15 +36,15 @@ class MessageSystem(UserList):
         user_set = set()
         # Go through all the messages that are in the system
         for message in self:            
-            # In the message we need to get the information about sender and receptionist
+            # In the message we need to get the information about sender and recipient 
             author, recipient = message.author, message.recipient
             # Check when the user is author
             if user == author:
                 user_set.add(recipient) 
-            # Check when the user is receptionist 
+            # Check when the user is recipient 
             if user == recipient:
                 user_set.add(author)  
-            # Check when the user is author and receptionist
+            # Check when the user is author and recipient
 
         return list(user_set)
 
