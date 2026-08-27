@@ -28,9 +28,26 @@ class Message:
     def mark_message_as_read(self):
         self.receiving_time = datetime.now()
 
+    def __str__(self) -> str:
+        return f"Message from [{self.author}] to [{self.recipient}] | '{self.content} {self.sending_time}'"
+
+    def __repr__(self) -> str:
+        return str(self)
+
 class MessageSystem(UserList):
     def __init__(self, messages: list[Message] = []) -> None:
         super().__init__(messages)
+
+    def get_messages_between_users(self, user_one: User, user_two: User) -> list[Message]:
+        messages_list = []
+        # Go through all the messages that are in the system
+        for message in self:
+            # In the message we need to get the information about sender and recipient
+            author, recipient = message.author, message.recipient
+            # Check if the message is between user_one and user_two
+            if (author == user_one and recipient == user_two) or (author == user_two and recipient == user_one):
+                messages_list.append(message)
+        return messages_list
 
     def get_all_chats(self, user: User) -> list[User]:
         user_set = set()
@@ -50,17 +67,21 @@ class MessageSystem(UserList):
 
 user_john = User("John", "Doe", "7678632482")
 user_jane = User("Jane", "Doe", "0987765576")
+user_jack = User("Jack", "Doe", "0987765576")
 
 message_one = Message("Hello, Jane!", user_john, user_jane)
 message_two = Message("Hello, John!", user_jane, user_john)
 message_three = Message("How are you doing?", user_john, user_jane)
 
-message_four = Message("Finish homework", user_john, user_john)
+message_four = Message("Todo: finish homework", user_john, user_john)
+message_five = Message("Hello, I'm Jack", user_jack, user_john)
 
-messages = [message_one, message_two, message_three, message_four]
+messages = [message_one, message_two, message_three, message_four, message_five]
 
 message_system = MessageSystem(messages)
-print(message_system.get_all_chats(user_john))
+# print(message_system.get_all_chats(user_john))
+for message in message_system.get_messages_between_users(user_john, user_jane):
+    print(message)
 
 
 
